@@ -89,3 +89,4 @@ def get_bounding_box(
         "indicator": metric.get("indicator"),
         "indicator_name": metric.get("indicator_name"),
     }
+

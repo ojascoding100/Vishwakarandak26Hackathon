@@ -14,9 +14,28 @@ export interface Company {
   discrepancy_flags?: number;
 }
 
+export interface WebArticleCitation {
+  title: string;
+  url: string;
+  source_name: string;
+  published_date: string | null;
+  snippet: string;
+  stance: 'CORROBORATES' | 'CONTRADICTS' | 'NEUTRAL_MENTION';
+}
+
+export interface WebVerificationResult {
+  web_corroboration_status:
+    | 'EXTERNALLY_CORROBORATED'
+    | 'EXTERNAL_DISCREPANCY_FOUND'
+    | 'NO_PUBLIC_RECORDS_FOUND';
+  web_summary: string;
+  articles: WebArticleCitation[];
+}
+
 export interface BrsrMetric {
   id: number;
-  company_id: string;
+  company_id?: string | null;
+  upload_id?: string | null;
   indicator: string;
   indicator_name: string;
   category: string;
@@ -31,7 +50,8 @@ export interface BrsrMetric {
 
 export interface AuditClaim {
   id: number;
-  company_id: string;
+  company_id?: string | null;
+  upload_id?: string | null;
   claim_text: string;
   source: string;
   indicator: string;
@@ -43,7 +63,32 @@ export interface AuditClaim {
   yoy_change_pct: number | null;
   page_number: number | null;
   bbox: [number, number, number, number] | null;
+  web_verification?: WebVerificationResult | null;
   created_at: string | null;
+}
+
+export interface UploadedReport {
+  id: string;
+  filename: string;
+  company_name: string;
+  total_pages: number;
+  file_url: string;
+  status: string;
+  claims_count: number;
+  flags_count: number;
+  metrics: BrsrMetric[];
+  claims: AuditClaim[];
+}
+
+export interface UploadResponse {
+  upload_id: string;
+  filename: string;
+  company_name: string;
+  total_pages: number;
+  file_url: string;
+  claims_audited: number;
+  flags_raised: number;
+  claims: AuditClaim[];
 }
 
 export interface BenchmarkItem {
@@ -85,4 +130,30 @@ export interface EngineStatus {
 export interface VerifyResponse {
   claims: AuditClaim[];
   engine_mode: string;
+}
+
+export interface AuditDossier {
+  title: string;
+  entity_id: string;
+  company_name: string;
+  audited_standard: string;
+  summary: {
+    total_claims: number;
+    contradicted: number;
+    cherry_picked: number;
+    unsubstantiated: number;
+    supported: number;
+    credibility_score: number;
+  };
+  claims: Array<{
+    claim_text: string;
+    verdict: string;
+    indicator: string;
+    metric_key: string;
+    math_recheck: string | null;
+    explanation: string;
+    pdf_citation: string;
+    web_corroboration: string;
+    web_articles_count: number;
+  }>;
 }

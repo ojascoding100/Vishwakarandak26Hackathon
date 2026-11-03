@@ -1,10 +1,13 @@
 import {
   AuditClaim,
+  AuditDossier,
   BenchmarkItem,
   BenchmarkResult,
   BrsrMetric,
   Company,
   EngineStatus,
+  UploadedReport,
+  UploadResponse,
   VerifyResponse,
 } from './types';
 
@@ -60,6 +63,47 @@ export async function fetchCompanyClaims(id: string): Promise<AuditClaim[]> {
     console.error(`Failed to fetch claims for company ${id}:`, err);
     return [];
   }
+}
+
+export async function uploadPdf(
+  file: File,
+  companyName?: string,
+  enableWebSearch: boolean = false
+): Promise<UploadResponse> {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (companyName) {
+    formData.append('company_name', companyName);
+  }
+  formData.append('enable_web_search', enableWebSearch ? 'true' : 'false');
+
+  const res = await fetch(`${API_BASE}/api/upload/pdf`, {
+    method: 'POST',
+    body: formData,
+  });
+  return handleResponse<UploadResponse>(res);
+}
+
+export async function fetchUploadedReport(uploadId: string): Promise<UploadedReport | null> {
+  try {
+    const res = await fetch(`${API_BASE}/api/upload/${uploadId}`, { cache: 'no-store' });
+    return await handleResponse<UploadedReport>(res);
+  } catch (err) {
+    console.error(`Failed to fetch uploaded report ${uploadId}:`, err);
+    return null;
+  }
+}
+
+export async function runWebVerifyClaim(claimId: number): Promise<AuditClaim> {
+  const res = await fetch(`${API_BASE}/api/audits/${claimId}/web-verify`, {
+    method: 'POST',
+  });
+  return handleResponse<AuditClaim>(res);
+}
+
+export async function exportAuditDossier(entityId: string): Promise<AuditDossier> {
+  const res = await fetch(`${API_BASE}/api/audits/${entityId}/export`, { cache: 'no-store' });
+  return handleResponse<AuditDossier>(res);
 }
 
 export async function verifyText(text: string, companyId: string): Promise<VerifyResponse> {

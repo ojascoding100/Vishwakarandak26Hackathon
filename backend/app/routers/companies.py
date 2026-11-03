@@ -137,3 +137,4 @@ async def get_company_claims(company_id: str, session: Session = Depends(get_ses
             "created_at": cl.created_at.isoformat() if cl.created_at else None,
         })
     return results
+

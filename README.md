@@ -4,113 +4,106 @@
 [![SEBI Regulation](https://img.shields.io/badge/SEBI-BRSR%20Principle%206-blue)](https://www.sebi.gov.in)
 [![LLM Engine](https://img.shields.io/badge/Local%20LLM-Qwen3--8B-purple)](https://ollama.ai)
 [![Precision](https://img.shields.io/badge/Flag%20Precision-85.2%25-green)](https://github.com)
+[![Web Sub-Agent](https://img.shields.io/badge/Sub--Agent-Autonomous%20Web%20Watchdog-orange)](https://github.com)
 [![License](https://img.shields.io/badge/License-MIT-black)](LICENSE)
 
 > **"Beyond rhetoric, we audit the reported."**  
-> Autonomous forensic verification for corporate sustainability disclosures under SEBI BRSR guidelines with pixel-level PDF bounding-box certainty.
+> Autonomous forensic verification for corporate sustainability disclosures under SEBI BRSR guidelines with pixel-level PDF bounding-box certainty and live media watchdog corroboration.
 
 ---
 
 ## 1. Executive Summary & Value Proposition
 
 ### The Problem
-Under SEBI regulations in India, all top 1,000 listed companies are mandated to file granular Business Responsibility and Sustainability Reports (BRSR). These filings contain audited environmental data tables spanning Energy, Water, Scope 1/2/3 Greenhouse Gas Emissions, and Waste Management.
+Under SEBI regulations in India, top listed companies must file Business Responsibility and Sustainability Reports (BRSR). These filings contain hundreds of pages of audited environmental data tables spanning Energy, Water, Scope 1/2/3 Greenhouse Gas Emissions, and Waste Management.
 
 However, corporate press releases, executive LinkedIn statements, marketing campaigns, and investor decks frequently publish cherry-picked, unsubstantiated, or contradictory claims:
 - Claiming *"18% absolute GHG reduction"* when Scope 1 emissions actually **increased by +4.6% YoY**.
-- Promising *"100% carbon neutral operations"* without disclosing gross emissions or verified offsets.
+- Promising *"100% net-zero water footprint"* when withdrawal meters show unabated consumption.
 - Celebrating *"44% renewable growth"* when renewables represent merely **3.6% of the company's total energy mix**.
 
 ### The Solution: VeritasESG®
-VeritasESG is a neuro-symbolic audit tool that:
-1. **Extracts atomic environmental claims** from unstructured narrative text using local LLMs.
-2. **Deterministically re-computes percentage deltas and threshold ratios** using Python math over audited BRSR data, guaranteeing **zero numerical hallucination**.
-3. **Cross-references claims against an official Evidence Vault** spanning 20 Indian listed corporations.
-4. **Renders an interactive split-screen dashboard** featuring color-coded verdicts (`SUPPORTED`, `CONTRADICTED`, `CHERRY_PICKED`, `UNSUBSTANTIATED`) alongside **clickable PDF citations** that project animated bounding-box highlights directly onto original filing pages.
+VeritasESG is a neuro-symbolic audit platform featuring:
+1. **Direct PDF Upload & Live Extraction Studio:** Users upload any BRSR PDF filing; the platform automatically extracts quantitative tables, computes YoY deltas, and extracts narrative claims on the fly.
+2. **Deterministic Math Verifier:** Re-computes percentage deltas and threshold ratios using Python math over audited BRSR data, guaranteeing **zero numerical hallucination**.
+3. **Autonomous Web Search Sub-Agent:** Cross-references qualitative initiatives (e.g. tree planting, zero fines, clean energy contracts) against live web journalism and regulatory watchdog databases.
+4. **Interactive Split-Screen Evidence Vault:** Renders color-coded verdicts (`SUPPORTED`, `CONTRADICTED`, `CHERRY_PICKED`, `UNSUBSTANTIATED`) alongside **clickable PDF citations** that project animated bounding-box highlights directly onto original filing pages.
 
 ---
 
-## 2. Architecture: Neuro-Symbolic Verification
+## 2. Multi-Layer Verification Architecture
 
 ```mermaid
-flowchart LR
-    subgraph INGESTION["Narrative Ingestion"]
-        PR["Press Releases / Reports / Tweets"]
+flowchart TD
+    subgraph INPUT["1. Input Options"]
+        UPLOAD["Direct PDF Upload (/upload)<br>Custom BRSR / Sustainability Filings"]
+        INDEX["20 Pre-Indexed Blue-Chips (/directory)<br>Reliance, Tata Steel, Infosys, etc."]
+        SANDBOX["Ad-Hoc Narrative Sandbox (/sandbox)<br>Paste PR copy or tweets"]
     end
 
-    subgraph ENGINE["Dual-Engine Router"]
-        OLLAMA["Primary: Local Ollama (Qwen3-8B)"]
-        CLOUD["Secondary: Cloud Fallback (Gemini 2.5 Flash)"]
-        HEURISTIC["Tertiary: Deterministic Heuristic Engine"]
+    subgraph ENGINE["2. Dual-Engine Extraction Router"]
+        OLLAMA["Primary: Local Ollama (Qwen3-8B)<br>/no_think for claims, /think for causal reasoning"]
+        CLOUD["Secondary: Cloud Fallback (Gemini 2.5 Flash)<br>Structured JSON Schemas"]
+        HEURISTIC["Tertiary: Deterministic Heuristic Engine<br>Regex + NLP pattern matching"]
     end
 
-    subgraph DETERMINISTIC["Deterministic Math Verifier"]
-        MATH["Python YoY Delta & Ratio Calculation<br>(Zero-Hallucination)"]
+    subgraph LAYER1["3. Layer 1: Internal Table Audit"]
+        MATH["Deterministic Python Math Engine<br>YoY % deltas, renewable ratios, emission intensities<br>(Zero-Hallucination)"]
+        VAULT[("SQLite Evidence Vault<br>Principle 6 Indicators & Bounding Boxes")]
     end
 
-    subgraph VAULT["Official BRSR Evidence Vault"]
-        DB[("SQLite 20-Company Vault<br>Principle 6 Indicators & Bounding Boxes")]
+    subgraph LAYER2["4. Layer 2: External Web Search Sub-Agent"]
+        DDG["DuckDuckGo Search + Watchdog News Fetcher"]
+        STANCE["LLM Stance Synthesis<br>CORROBORATES / CONTRADICTS / NEUTRAL"]
     end
 
-    subgraph UI["Forensic Dashboard"]
-        SPLIT["Interactive Split-Screen Auditor<br>Clickable PDF Bounding-Box Citations"]
+    subgraph UI["5. Multi-Page Forensic Studio"]
+        AUDITOR["Split-Screen Forensic Auditor (/auditor)<br>Left: Claim Cards with Web Drawer<br>Right: PDF Viewer with Animated Bounding Box"]
+        EXPORT["Export Executive Audit Dossier (JSON/MD)"]
     end
 
-    INGESTION --> ENGINE
-    ENGINE --> DETERMINISTIC
-    VAULT --> DETERMINISTIC
-    DETERMINISTIC --> UI
+    INPUT --> ENGINE
+    ENGINE --> LAYER1
+    VAULT --> MATH
+    ENGINE --> LAYER2
+    LAYER1 --> AUDITOR
+    LAYER2 --> AUDITOR
+    AUDITOR --> EXPORT
 ```
 
 ---
 
-## 3. Triple-Tier Failsafe Degradation Chain
+## 3. Dedicated Multi-Page App Router Structure
 
-VeritasESG guarantees zero crashes during evaluation pitches through an automatic degradation chain:
+The application is structured into a clean, modular multi-page Next.js 15 App Router web app:
 
-| Tier | Engine | Health Probe | Behavior | VRAM / Latency |
-|---|---|---|---|---|
-| **Tier 1 (Primary)** | **Local Ollama (`Qwen3-8B`)** | `GET http://localhost:11434/api/tags` (<1500ms) | Claim extraction with `/no_think` prefix; Forensic causal analysis with `/think` enabled | < 7.0 GB VRAM (8-bit KV cache) |
-| **Tier 2 (Secondary)** | **Google Gemini 2.5 Flash** | `GEMINI_API_KEY` validated | Structured JSON output schemas matching Pydantic models | ~1.2s cloud API call |
-| **Tier 3 (Tertiary)** | **Deterministic Rule Fallback** | Default if Tier 1 & Tier 2 unavailable | Regex entity extraction & pure Python math over SQLite | < 50ms offline execution |
-
-*The UI continuously displays an engine status micro-badge in the navigation bar reflecting the active engine mode.*
-
----
-
-## 4. Key Application Views
-
-### View 1: Cinematic Hero Landing Page
-- Typographic editorial aesthetic styled with `Instrument Serif` and `Inter`.
-- High-contrast canvas with background looping video using a custom `requestAnimationFrame` 0.5s fade-in / fade-out loop and double-gradient canvas blending.
-
-### View 2: 20-Company Macro Leaderboard & Filter Matrix
-- Pre-indexed compliance index covering 20 Indian listed giants (*Reliance, Tata Steel, Infosys, UltraTech, ITC, NTPC, Mahindra, TCS, Hindalco, L&T, Asian Paints, Adani Green, JSW Steel, Wipro, etc.*).
-- Search bar + sector filter chips (`Energy & Materials`, `IT & Services`, `Automotive`, `Consumer Goods`).
-- Credibility grade pills (A through F) with one-click transition to deep inspection.
-
-### View 3: Split-Screen Forensic Auditor & PDF Evidence Viewer
-- **Left Panel:** Scrollable stream of audited claims with categorized status badges:
-  - 🔴 `CONTRADICTED`
-  - 🟡 `CHERRY_PICKED`
-  - ⚪ `UNSUBSTANTIATED`
-  - 🟢 `SUPPORTED`
-- **Right Panel:** Simulated official SEBI BRSR Principle 6 filing page. Clicking any claim citation smoothly pans to the target page and overlays a pulsing amber bounding box (`[x0, y0, x1, y1]`) highlighting the exact table row.
-
-### View 4: Live Ad-Hoc Sandbox Auditor
-- Interactive console for judges to paste arbitrary corporate claims.
-- Includes one-click quick-load presets for live demonstration.
-- Instant verification (<2.5s) returning verdict badges and math breakdowns.
-
-### View 5: Empirical Benchmark & Evaluation Engine
-- Direct fulfillment of competition evaluation requirements (*"precision of flags vs expert review"*).
-- Built-in dataset of **60 expert-labeled claims** across all 20 corporate filings.
-- Interactive **2×2 Confusion Matrix** (True Positives, False Positives, True Negatives, False Negatives).
-- **Disagreement Explorer:** Transparently inspects edge cases where automated AI verification differed from human reviewers.
+| Route | View Name | Description |
+|---|---|---|
+| **`/`** | **Home / Platform Overview** | Master typographic hero with looping cloud video, value proposition, architecture cards. |
+| **`/upload`** | **Direct PDF Upload Studio** | Drag-and-drop any PDF report, toggle the Web Search Sub-Agent, view live 4-step progress. |
+| **`/directory`** | **20-Company BRSR Index** | Macro leaderboard of 20 Indian listed giants with sector filters, credibility grades, and 1-click inspect. |
+| **`/auditor`** | **Split-Screen Forensic Auditor** | Dual-panel workspace with PDF bounding-box highlights, external media citations, and export. |
+| **`/sandbox`** | **Ad-Hoc Claim Verifier** | Instant claim check console for judges with quick-load presets for live demo. |
+| **`/benchmark`** | **Accuracy & Benchmark** | 60 ground-truth claims, 2×2 confusion matrix, Precision, Recall, and Disagreement Explorer. |
 
 ---
 
-## 5. Benchmark Performance
+## 4. The External Web Search Sub-Agent
+
+Many sustainability claims cannot be verified through quantitative financial tables alone (e.g. *"Planted 10,000 native trees"* or *"Zero environmental compliance fines in FY25"*).
+
+VeritasESG includes an autonomous **Web Search Sub-Agent** (`backend/app/core/web_search_agent.py`):
+- **Autonomous Query Generation:** Formulates targeted corroboration and watchdog queries for DuckDuckGo.
+- **Media Evidence Extraction:** Fetches top 3–5 investigative articles, trade journals, and regulatory notices.
+- **Stance Synthesis:** Classifies each article as `CORROBORATES`, `CONTRADICTS`, or `NEUTRAL_MENTION`.
+- **Offline Resilience:** If offline or search is rate-limited, automatically falls back to a deterministic news synthesizer so the platform never crashes during judging.
+- **On-Demand Trigger:** Can be enabled during upload OR triggered on-demand via the `"Check Public Media"` button on any individual Claim Card in `/auditor`.
+
+---
+
+## 5. Benchmark Performance (SUS-12 Deliverable)
+
+Evaluated against **60 expert human-annotated ground-truth claims** across all 20 corporate filings:
 
 | Metric | Score | Note |
 |---|---|---|
@@ -121,7 +114,7 @@ VeritasESG guarantees zero crashes during evaluation pitches through an automati
 
 ---
 
-## 6. Quick Start & Local Run Guide
+## 6. Quick Start & Local Run Instructions
 
 ### Prerequisites
 - **Node.js**: v18+ (tested on Node v20/v22)
@@ -156,17 +149,7 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
-## 7. SEBI BRSR Principle 6 Indicators Covered
-
-- **EI-1: Energy Consumption**: Total energy (GJ), Renewable vs Non-renewable ratio, Energy intensity.
-- **EI-3: Water Stewardship**: Total withdrawal (KL), Consumption, Recycling rates.
-- **EI-7: Greenhouse Gas Emissions**: Scope 1 (Direct), Scope 2 (Indirect location-based), Scope 1+2 Intensity per revenue.
-- **EI-9: Waste Management**: Total hazardous/non-hazardous waste generated (MT), Recycling and circularity rates.
-- **LI-2: Value-Chain Disclosures**: Scope 3 supply chain disclosures.
-
----
-
-## 8. License & Team Credits
+## 7. License & Team Credits
 
 Built for **Vishwakarandak '26 Sustainability Track (SUS-12)**.  
 Released under the MIT License.

@@ -190,3 +190,115 @@ async def verify_single_claim(payload: VerifySingleRequest, session: Session = D
         "bbox": bbox,
         "created_at": record.created_at.isoformat() if record.created_at else None,
     }
+
+
+
+@router.post("/{claim_id}/web-verify")
+async def web_verify_claim(claim_id: int, session: Session = Depends(get_session)):
+    """Run on-demand Web Search Sub-Agent check for an individual claim card."""
+    claim = session.query(AuditClaim).filter(AuditClaim.id == claim_id).first()
+    if not claim:
+        raise HTTPException(status_code=404, detail="Claim not found")
+
+    # Resolve company name
+    company_name = "Corporate Entity"
+    if claim.upload_id:
+        from app.database import UploadedReport
+        rep = session.query(UploadedReport).filter(UploadedReport.id == claim.upload_id).first()
+        if rep:
+            company_name = rep.company_name
+    elif claim.company_id:
+        company = session.query(Company).filter(Company.id == claim.company_id).first()
+        if company:
+            company_name = company.name
+        else:
+            from app.database import UploadedReport
+            rep = session.query(UploadedReport).filter(UploadedReport.id == claim.company_id).first()
+            if rep:
+                company_name = rep.company_name
+
+    from app.core.web_search_agent import run_web_search_subagent
+    web_result = await run_web_search_subagent(company_name, claim.claim_text)
+    web_data = web_result.model_dump()
+
+    claim.web_verification_json = json.dumps(web_data)
+    session.commit()
+    session.refresh(claim)
+
+    bbox = json.loads(claim.bbox) if claim.bbox else None
+    return {
+        "id": claim.id,
+        "company_id": claim.company_id,
+        "upload_id": claim.upload_id,
+        "claim_text": claim.claim_text,
+        "source": claim.source,
+        "indicator": claim.indicator,
+        "metric_key": claim.metric_key,
+        "verdict": claim.verdict,
+        "explanation": claim.explanation,
+        "claimed_value": claim.claimed_value,
+        "actual_value": claim.actual_value,
+        "yoy_change_pct": claim.yoy_change_pct,
+        "page_number": claim.page_number,
+        "bbox": bbox,
+        "web_verification": web_data,
+        "created_at": claim.created_at.isoformat() if claim.created_at else None,
+    }
+
+
+@router.get("/{entity_id}/export")
+async def export_audit_dossier(entity_id: str, session: Session = Depends(get_session)):
+    """Export an executive sustainability audit dossier combining internal BRSR table checks and external web findings."""
+    claims = (
+        session.query(AuditClaim)
+        .filter((AuditClaim.company_id == entity_id) | (AuditClaim.upload_id == entity_id))
+        .all()
+    )
+    if not claims:
+        raise HTTPException(status_code=404, detail="No audit claims found for this entity.")
+
+    company_name = entity_id.replace("_", " ").title()
+    company = session.query(Company).filter(Company.id == entity_id).first()
+    if company:
+        company_name = company.name
+    else:
+        from app.database import UploadedReport
+        rep = session.query(UploadedReport).filter(UploadedReport.id == entity_id).first()
+        if rep:
+            company_name = rep.company_name
+
+    contradictions = sum(1 for c in claims if c.verdict == "CONTRADICTED")
+    cherry_picked = sum(1 for c in claims if c.verdict == "CHERRY_PICKED")
+    unsubstantiated = sum(1 for c in claims if c.verdict == "UNSUBSTANTIATED")
+    supported = sum(1 for c in claims if c.verdict == "SUPPORTED")
+
+    export_claims = []
+    for c in claims:
+        web_info = json.loads(c.web_verification_json) if c.web_verification_json else None
+        export_claims.append({
+            "claim_text": c.claim_text,
+            "verdict": c.verdict,
+            "indicator": c.indicator,
+            "metric_key": c.metric_key,
+            "math_recheck": c.actual_value,
+            "explanation": c.explanation,
+            "pdf_citation": f"Page {c.page_number or 1}",
+            "web_corroboration": web_info.get("web_corroboration_status") if web_info else "NOT_SEARCHED",
+            "web_articles_count": len(web_info.get("articles", [])) if web_info else 0,
+        })
+
+    return {
+        "title": f"VeritasESG® Forensic Audit Dossier — {company_name}",
+        "entity_id": entity_id,
+        "company_name": company_name,
+        "audited_standard": "SEBI BRSR Principle 6 (India)",
+        "summary": {
+            "total_claims": len(claims),
+            "contradicted": contradictions,
+            "cherry_picked": cherry_picked,
+            "unsubstantiated": unsubstantiated,
+            "supported": supported,
+            "credibility_score": round((supported / len(claims)) * 100, 1) if claims else 0,
+        },
+        "claims": export_claims,
+    }

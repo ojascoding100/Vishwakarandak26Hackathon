@@ -216,3 +216,4 @@ export default function LeaderboardTable({ onSelectCompany }: LeaderboardTablePr
     </div>
   );
 }
+

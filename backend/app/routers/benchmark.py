@@ -127,3 +127,4 @@ async def get_benchmark_metrics(session: Session = Depends(get_session)):
     if _cached_results is None:
         return await run_benchmark_evaluation(session)
     return _cached_results
+

@@ -38,7 +38,7 @@ export default function HeroSection() {
       setTimeout(() => {
         if (video) {
           video.currentTime = 0;
-          video.play().catch(() => {});
+          video.play().catch(() => { });
         }
       }, 100);
     };
@@ -47,7 +47,7 @@ export default function HeroSection() {
     video.addEventListener('ended', handleEnded);
 
     // Initial play attempt
-    video.play().catch(() => {});
+    video.play().catch(() => { });
 
     return () => {
       cancelAnimationFrame(animId);

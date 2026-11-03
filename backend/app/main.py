@@ -3,16 +3,22 @@
 from __future__ import annotations
 
 import logging
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.core.engine_factory import audit_engine
 from app.database import init_db
-from app.routers import audits, benchmark, companies
+from app.routers import audits, benchmark, companies, upload
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("veritas_esg")
+
+# Ensure uploads directory exists
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "uploads")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 @asynccontextmanager
@@ -45,10 +51,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static uploads
+app.mount("/static/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
 # Register routers
 app.include_router(companies.router)
 app.include_router(audits.router)
 app.include_router(benchmark.router)
+app.include_router(upload.router)
 
 
 @app.get("/")

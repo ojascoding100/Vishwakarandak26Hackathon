@@ -1,11 +1,14 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { fetchEngineStatus } from '@/lib/api';
 import { EngineStatus } from '@/lib/types';
-import { ShieldCheck, Cpu, AlertTriangle, ArrowRight } from 'lucide-react';
+import { ShieldCheck, Cpu, AlertTriangle, UploadCloud } from 'lucide-react';
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [engineStatus, setEngineStatus] = useState<EngineStatus | null>(null);
 
   useEffect(() => {
@@ -18,13 +21,6 @@ export default function Navbar() {
     const interval = setInterval(updateStatus, 10000);
     return () => clearInterval(interval);
   }, []);
-
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   const getBadgeStyle = () => {
     if (!engineStatus || !engineStatus.healthy) {
@@ -49,24 +45,33 @@ export default function Navbar() {
     return <ShieldCheck className="w-3 h-3 text-zinc-600" />;
   };
 
+  const navLinks = [
+    { label: 'Platform', href: '/' },
+    { label: '20-Company Index', href: '/directory' },
+    { label: 'Upload Studio', href: '/upload', isNew: true },
+    { label: 'Live Auditor', href: '/auditor' },
+    { label: 'Sandbox', href: '/sandbox' },
+    { label: 'Benchmark', href: '/benchmark' },
+  ];
+
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E5E7EB] transition-all">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         {/* Brand Logo */}
         <div className="flex items-center space-x-4">
-          <a
-            href="#"
+          <Link
+            href="/"
             className="font-serif text-3xl tracking-tight text-black hover:opacity-90 transition-opacity flex items-center gap-1.5"
           >
             <span>VeritasESG</span>
             <span className="text-xs align-super font-sans font-semibold tracking-normal text-[#6F6F6F]">
               ®
             </span>
-          </a>
+          </Link>
 
           {/* Engine Status Micro-Pill */}
           <div
-            className={`hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${getBadgeStyle()}`}
+            className={`hidden lg:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border ${getBadgeStyle()}`}
             title={engineStatus?.detail || 'Audit Engine'}
           >
             {getStatusIcon()}
@@ -78,49 +83,41 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Editorial Navigation */}
-        <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
-          <button
-            onClick={() => scrollTo('hero')}
-            className="text-[#6F6F6F] hover:text-black transition-colors"
-          >
-            Platform
-          </button>
-          <button
-            onClick={() => scrollTo('leaderboard')}
-            className="text-[#6F6F6F] hover:text-black transition-colors"
-          >
-            20-Company Index
-          </button>
-          <button
-            onClick={() => scrollTo('auditor')}
-            className="text-[#6F6F6F] hover:text-black transition-colors"
-          >
-            Live Auditor
-          </button>
-          <button
-            onClick={() => scrollTo('benchmark')}
-            className="text-[#6F6F6F] hover:text-black transition-colors"
-          >
-            Benchmark & Accuracy
-          </button>
-          <button
-            onClick={() => scrollTo('sandbox')}
-            className="text-[#6F6F6F] hover:text-black transition-colors"
-          >
-            Ad-Hoc Sandbox
-          </button>
+        {/* Editorial Multi-Page Navigation Links */}
+        <nav className="hidden md:flex items-center space-x-7 text-sm">
+          {navLinks.map((link) => {
+            const isActive =
+              link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`transition-colors flex items-center gap-1.5 ${
+                  isActive
+                    ? 'text-black font-semibold border-b-2 border-black pb-0.5'
+                    : 'text-[#6F6F6F] hover:text-black font-medium'
+                }`}
+              >
+                <span>{link.label}</span>
+                {link.isNew && (
+                  <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-black text-white">
+                    LIVE
+                  </span>
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Action Button */}
+        {/* Action Button: Route directly to Upload Studio */}
         <div className="flex items-center space-x-3">
-          <button
-            onClick={() => scrollTo('auditor')}
-            className="rounded-full px-6 py-2.5 text-sm font-medium bg-black text-white hover:scale-105 active:scale-95 transition-all shadow-sm flex items-center gap-2"
+          <Link
+            href="/upload"
+            className="rounded-full px-5 py-2.5 text-xs sm:text-sm font-medium bg-black text-white hover:scale-105 active:scale-95 transition-all shadow-sm flex items-center gap-2"
           >
-            <span>Audit Filing</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+            <UploadCloud className="w-4 h-4" />
+            <span>Upload &amp; Audit PDF</span>
+          </Link>
         </div>
       </div>
     </header>

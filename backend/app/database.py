@@ -44,13 +44,33 @@ class Company(Base):
     logo_initial: str = Column(String, nullable=False)
 
 
+class UploadedReport(Base):
+    """A user-uploaded BRSR or sustainability PDF report."""
+
+    __tablename__ = "uploaded_reports"
+
+    id: str = Column(String, primary_key=True)
+    filename: str = Column(String, nullable=False)
+    company_name: str = Column(String, nullable=False)
+    file_path: str = Column(String, nullable=False)
+    file_size: int = Column(Integer, default=0)
+    total_pages: int = Column(Integer, default=1)
+    status: str = Column(String, default="processing")  # processing, completed, failed
+    claims_count: int = Column(Integer, default=0)
+    flags_count: int = Column(Integer, default=0)
+    created_at: datetime = Column(
+        DateTime, nullable=False, default=lambda: datetime.now(timezone.utc)
+    )
+
+
 class BrsrMetric(Base):
     """A single BRSR environmental metric row extracted from a filing."""
 
     __tablename__ = "brsr_metrics"
 
     id: int = Column(Integer, primary_key=True, autoincrement=True)
-    company_id: str = Column(String, ForeignKey("companies.id"), nullable=False)
+    company_id: Optional[str] = Column(String, nullable=True)
+    upload_id: Optional[str] = Column(String, nullable=True)
     indicator: str = Column(String, nullable=False)
     indicator_name: str = Column(String, nullable=False)
     category: str = Column(String, nullable=False)
@@ -69,7 +89,8 @@ class AuditClaim(Base):
     __tablename__ = "audit_claims"
 
     id: int = Column(Integer, primary_key=True, autoincrement=True)
-    company_id: str = Column(String, ForeignKey("companies.id"), nullable=False)
+    company_id: Optional[str] = Column(String, nullable=True)
+    upload_id: Optional[str] = Column(String, nullable=True)
     claim_text: str = Column(Text, nullable=False)
     source: str = Column(String, nullable=True)
     indicator: str = Column(String, nullable=True)
@@ -81,6 +102,7 @@ class AuditClaim(Base):
     yoy_change_pct: Optional[float] = Column(Float, nullable=True)
     page_number: Optional[int] = Column(Integer, nullable=True)
     bbox: Optional[str] = Column(Text, nullable=True)  # JSON string
+    web_verification_json: Optional[str] = Column(Text, nullable=True)  # JSON string of WebVerificationResult
     created_at: datetime = Column(
         DateTime, nullable=False, default=lambda: datetime.now(timezone.utc)
     )
@@ -92,7 +114,7 @@ class BenchmarkItem(Base):
     __tablename__ = "benchmark_items"
 
     id: int = Column(Integer, primary_key=True)
-    company_id: str = Column(String, ForeignKey("companies.id"), nullable=False)
+    company_id: str = Column(String, nullable=False)
     claim_text: str = Column(Text, nullable=False)
     source: str = Column(String, nullable=True)
     indicator: str = Column(String, nullable=True)
@@ -183,7 +205,6 @@ def seed_database(session: Session) -> None:
         with open(_seed_data_path("benchmark_groundtruth.json"), "r", encoding="utf-8") as fh:
             items = json.load(fh)
         for item in items:
-            # Look up the metric to get page_number and bbox
             metric = (
                 session.query(BrsrMetric)
                 .filter(
