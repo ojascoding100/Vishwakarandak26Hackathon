@@ -1,0 +1,223 @@
+[
+  {
+    "id": "reliance",
+    "name": "Reliance Industries Limited",
+    "sector": "Energy & Materials",
+    "ticker": "RELIANCE.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 142,
+    "credibility_grade": "B",
+    "logo_initial": "R"
+  },
+  {
+    "id": "tata_steel",
+    "name": "Tata Steel Limited",
+    "sector": "Energy & Materials",
+    "ticker": "TATASTEEL.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 128,
+    "credibility_grade": "C",
+    "logo_initial": "TS"
+  },
+  {
+    "id": "infosys",
+    "name": "Infosys Limited",
+    "sector": "IT & Services",
+    "ticker": "INFY.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 98,
+    "credibility_grade": "A",
+    "logo_initial": "I"
+  },
+  {
+    "id": "ultratech",
+    "name": "UltraTech Cement Limited",
+    "sector": "Energy & Materials",
+    "ticker": "ULTRACEMCO.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 116,
+    "credibility_grade": "C",
+    "logo_initial": "UC"
+  },
+  {
+    "id": "itc",
+    "name": "ITC Limited",
+    "sector": "Consumer Goods",
+    "ticker": "ITC.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 134,
+    "credibility_grade": "A",
+    "logo_initial": "ITC"
+  },
+  {
+    "id": "ntpc",
+    "name": "NTPC Limited",
+    "sector": "Energy & Materials",
+    "ticker": "NTPC.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 156,
+    "credibility_grade": "D",
+    "logo_initial": "N"
+  },
+  {
+    "id": "mahindra",
+    "name": "Mahindra & Mahindra Limited",
+    "sector": "Automotive",
+    "ticker": "M&M.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 112,
+    "credibility_grade": "B",
+    "logo_initial": "M"
+  },
+  {
+    "id": "tcs",
+    "name": "Tata Consultancy Services",
+    "sector": "IT & Services",
+    "ticker": "TCS.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 105,
+    "credibility_grade": "A",
+    "logo_initial": "TCS"
+  },
+  {
+    "id": "hindalco",
+    "name": "Hindalco Industries Limited",
+    "sector": "Energy & Materials",
+    "ticker": "HINDALCO.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 138,
+    "credibility_grade": "C",
+    "logo_initial": "H"
+  },
+  {
+    "id": "larsen",
+    "name": "Larsen & Toubro Limited",
+    "sector": "Energy & Materials",
+    "ticker": "LT.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 148,
+    "credibility_grade": "B",
+    "logo_initial": "LT"
+  },
+  {
+    "id": "asian_paints",
+    "name": "Asian Paints Limited",
+    "sector": "Consumer Goods",
+    "ticker": "ASIANPAINT.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 94,
+    "credibility_grade": "B",
+    "logo_initial": "AP"
+  },
+  {
+    "id": "adani_green",
+    "name": "Adani Green Energy Limited",
+    "sector": "Energy & Materials",
+    "ticker": "ADANIGREEN.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 110,
+    "credibility_grade": "D",
+    "logo_initial": "AG"
+  },
+  {
+    "id": "jsw_steel",
+    "name": "JSW Steel Limited",
+    "sector": "Energy & Materials",
+    "ticker": "JSWSTEEL.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 122,
+    "credibility_grade": "C",
+    "logo_initial": "JSW"
+  },
+  {
+    "id": "wipro",
+    "name": "Wipro Limited",
+    "sector": "IT & Services",
+    "ticker": "WIPRO.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 96,
+    "credibility_grade": "A",
+    "logo_initial": "W"
+  },
+  {
+    "id": "bajaj_auto",
+    "name": "Bajaj Auto Limited",
+    "sector": "Automotive",
+    "ticker": "BAJAJ-AUTO.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 88,
+    "credibility_grade": "B",
+    "logo_initial": "BA"
+  },
+  {
+    "id": "bharti_airtel",
+    "name": "Bharti Airtel Limited",
+    "sector": "IT & Services",
+    "ticker": "BHARTIARTL.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 102,
+    "credibility_grade": "B",
+    "logo_initial": "BA"
+  },
+  {
+    "id": "grasim",
+    "name": "Grasim Industries Limited",
+    "sector": "Energy & Materials",
+    "ticker": "GRASIM.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 118,
+    "credibility_grade": "C",
+    "logo_initial": "G"
+  },
+  {
+    "id": "sun_pharma",
+    "name": "Sun Pharmaceutical Industries",
+    "sector": "Consumer Goods",
+    "ticker": "SUNPHARMA.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 108,
+    "credibility_grade": "B",
+    "logo_initial": "SP"
+  },
+  {
+    "id": "power_grid",
+    "name": "Power Grid Corporation of India",
+    "sector": "Energy & Materials",
+    "ticker": "POWERGRID.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 132,
+    "credibility_grade": "C",
+    "logo_initial": "PG"
+  },
+  {
+    "id": "maruti",
+    "name": "Maruti Suzuki India Limited",
+    "sector": "Automotive",
+    "ticker": "MARUTI.NS",
+    "brsr_fy": "FY2024-25",
+    "brsr_status": "Filed & Assured",
+    "filing_pages": 114,
+    "credibility_grade": "B",
+    "logo_initial": "MS"
+  }
+]
+
