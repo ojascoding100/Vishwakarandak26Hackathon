@@ -285,3 +285,4 @@ def _extract_number(row: list, prefer_index: int) -> float | None:
                 except ValueError:
                     continue
     return None
+
